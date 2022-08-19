@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Use this Bash script to run multiple clients one after another.
+
+echo "Run multiple clients"
+
+# while IFS= read -r line; do echo "$line"; done < ../../_rooms/econ101.txt
+# while IFS= read -r; do lines+=("$REPLY"); done <
+
+arr=()
+while IFS= read -r line; do
+  arr+=("$line")
+done < ../../../_rooms/econ101.txt
+
+echo "Participants are: ${arr[*]}"
+
+echo "Run Clients for Participants: ${arr[*]:0:${1:-3}}"
+
+# for participant in "${arr[@]:0:14}"
+for participant in "${arr[@]:0:${1:-3}}"
+do
+    python client.py "$participant" &
+    echo "Running next client in ${2:-0.5} seconds"
+    sleep "${2:-0.5}"
+done

@@ -1,0 +1,348 @@
+{{ block content }}
+
+<style>
+    .rcorners {
+        border-radius: 8px;
+        border: 2px solid var(--bs-dark);
+        padding: 8px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: available;
+        height: fit-content;
+    }
+
+    /* Styles for badges with outline. Use with Bootstrap Badges. */
+    .bg-outline {
+        color: black;
+        border: 1px solid black;
+        background-color: transparent;
+    }
+
+    .bg-outline.primary {
+        color: var(--bs-primary);
+        border-color: var(--bs-primary);
+    }
+
+    .bg-outline.secondary {
+        color: var(--bs-secondary);
+        border-color: var(--bs-secondary);
+    }
+
+    .bg-outline.success {
+        color: var(--bs-success);
+        border-color: var(--bs-success);
+    }
+
+    .bg-outline.danger {
+        color: var(--bs-danger);
+        border-color: var(--bs-danger);
+    }
+
+    .bg-outline.warning {
+        color: var(--bs-warning);
+        border-color: var(--bs-warning);
+    }
+
+    .bg-outline.info {
+        color: var(--bs-info);
+        border-color: var(--bs-info);
+    }
+
+    .bg-outline.light {
+        color: var(--bs-light);
+        border-color: var(--bs-light);
+    }
+
+    .bg-outline.dark {
+        color: var(--bs-dark);
+        border-color: var(--bs-dark);
+    }
+
+</style>
+
+<!-- Title -->
+<div class="jumbotron">
+    <h1 class="display-4">Testing WebSocket Functionality</h1>
+    <p class="lead">Support Tool for Testing New Client Implementations</p>
+    <hr class="my-4">
+</div>
+
+<!-- Server Info -->
+<h4>Server Info</h4>
+<div class="table-responsive">
+    <table class="table table-striped table-dark table-hover" style="width: 100%">
+       <caption>Restart After Changes</caption>
+       <thead>
+           <tr>
+               <th>Status</th>
+               <th>Additional Information</th>
+           </tr>
+       </thead>
+
+        <tbody class="table-hover">
+            <!-- Authentication -->
+            <tr>
+                {{ if C.AUTH_LEVEL in {"STUDY", "DEMO"} }}
+                    <td>
+                        <span class="badge rounded-pill bg-success">Authentication On</span>
+                    </td>
+                    <td>
+                        <p>Connecting Clients Must Authenticate with the OTREE_ADMIN_PASSWORD and a Valid Participant Label</p>
+                    </td>
+                {{ else }}
+                    <td>
+                        <span class="badge rounded-pill bg-danger">Authentication Off</span>
+                    </td>
+                    <td>
+                        <p>Set OTREE_AUTH_LEVEL to 'STUDY' or 'DEMO' To Activate</p>
+                    </td>
+                {{ endif }}
+            </tr>
+
+            <!-- Participant Label File -->
+            <tr>
+                {{ if C.PARTICIPANT_LABELS_SET }}
+                    <td>
+                        <span class="badge rounded-pill bg-success">Participant Labels Set</span>
+                    </td>
+                    <td>
+                        <p>Participant Label File Set and Not Empty</p>
+                    </td>
+                {{ else }}
+                    <td>
+                        <span class="badge rounded-pill bg-danger">Participant Label File NOT Set or Empty</span>
+                    </td>
+                    <td>
+                        <p>Set the Participant Label File and/or Fill the Set File and Restart the Server</p>
+                    </td>
+                {{ endif }}
+            </tr>
+
+           <!-- OTREE_ADMIN_PASSWORD -->
+            <tr>
+                {{ if C.OTREE_ADMIN_PASSWORD_SET == True }}
+                    <td>
+                        <span class="badge rounded-pill bg-success">OTREE_ADMIN_PASSWORD Set</span>
+                    </td>
+                    <td>
+                        <p>-</p>
+                    </td>
+                {{ else }}
+                    <td>
+                        <span class="badge rounded-pill bg-danger">OTREE_ADMIN_PASSWORD NOT Set</span>
+                    </td>
+                    <td>
+                        <p>Set your Password in the OTREE_ADMIN_PASSWORD Environment Variable</p>
+                    </td>
+                {{ endif }}
+            </tr>
+       </tbody>
+    </table>
+</div>
+
+<hr>
+
+<!-- Test Recording Instructions -->
+<h4>Test Recording Instructions</h4>
+<div id="recording-instructions">
+    <!-- Help -->
+    <a data-bs-toggle="collapse" href="#test-recording-instructions-help" role="button" aria-expanded="false" aria-controls="test-recording-instructions-help">Help</a>
+    <div class="collapse" id="test-recording-instructions-help">
+        <div class="card card-body">
+            <h5>Participants</h5>
+            <p>Lorem Ipsum</p>
+
+            <h5>To All</h5>
+            <p>Lorem Ipsum</p>
+
+            <h5>Recording</h5>
+            <p><strong>Start:</strong> Lorem Ipsum</p>
+            <p><strong>Pause:</strong> Recording Lorem Ipsum</p>
+            <p><strong>Stop:</strong> Recording Lorem Ipsum</p>
+        </div>
+    </div>
+
+    <!-- Create Template -->
+    <template id="template-instructions">
+        <div class="container px-0 mt-4">
+            <div class="row align-items-center">
+
+                <div class="col-6">
+                    <label for="text-participants">Participants</label>
+                    <input type="text" class="form-control" id="text-participants">
+                </div>
+
+                <div class="col-2 form-check form-switch">
+                    <label class="form-check-label" for="checkbox-to-all">To All</label>
+                    <input class="form-check-input"  type="checkbox" role="switch" id="checkbox-to-all"/>
+                </div>
+
+                <div class="col-1 align-self-end">
+                    <input class="btn btn-dark" type="button" onclick="start()" value="Start Recording" id="button-instruction">
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
+
+<hr>
+
+<!-- Connected Clients -->
+<h4>Connected Clients</h4>
+<div>
+    <!-- Help -->
+    <a data-bs-toggle="collapse" href="#connected-clients-help" role="button" aria-expanded="false" aria-controls="connected-clients-help">Help</a>
+    <br>
+    <div class="collapse" id="connected-clients-help">
+        <div class="card card-body">
+            <h5>Heading?</h5>
+            <p>Lorem Ipsum</p>
+        </div>
+    </div>
+
+    <input class="btn btn-dark mt-4 mb-4" type="button" onclick="liveSend([4, '', false])" value="Refresh">
+
+    <div class="table-responsive">
+        <table class="table table-striped table-dark table-hover" style="width: 100%">
+           <caption>List of all currently connected participants. Note that the list does not refresh automatically.</caption>
+           <thead>
+               <tr>
+                   <th>Participant Label</th>
+                   <th>Time of Authentication</th>
+               </tr>
+           </thead>
+           <tbody id="table-body-connected-clients" class="table-hover">
+                <!-- Table is populated using JS -->
+           </tbody>
+        </table>
+    </div>
+</div>
+
+<hr>
+
+<!-- Participant Labels-->
+<h4>Participant Labels</h4>
+<div>
+   {{ for label in C.PARTICIPANT_LABELS }}
+    <span class="badge rounded-pill bg-outline dark">{{ label }}</span>
+    {{ endfor }}
+</div>
+
+
+<script>
+    // Enable tooltips everywhere after DOM content loaded
+    /*document.addEventListener("DOMContentLoaded", () => {
+        let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    }); */
+
+    // Enable tooltips everywhere using jQuery
+    /*$(document).ready(function(){
+            $('[data-bs-toggle="tooltip"]').tooltip();
+    });*/
+
+    // Test Recording Instructions
+    const instructions = ["Start Recording", "Pause Recording", "Stop Recording"];
+    let templateInstructions = document.getElementById('template-instructions');
+
+    for (const instruction of instructions) {
+
+        let clone = templateInstructions.content.cloneNode(true);
+
+        let participant_labels_el = clone.getElementById("text-participants");
+        let to_all_el = clone.getElementById("checkbox-to-all");
+        to_all_el.addEventListener("change", (e) => {
+            participant_labels_el.disabled = e.target.checked;
+        });
+        let button = clone.getElementById("button-instruction");
+
+        switch (instruction) {
+            case "Start Recording":
+                button.value = "Start Recording";
+                button.onclick = function() {start(participant_labels_el, to_all_el)};
+                break;
+            case "Pause Recording":
+                button.value = "Pause Recording";
+                button.onclick = function() {pause(participant_labels_el, to_all_el)};
+                break;
+            case "Stop Recording":
+                button.value = "Stop Recording";
+                button.onclick = function() {stop(participant_labels_el, to_all_el)};
+                break;
+        }
+
+        document.getElementById('recording-instructions').appendChild(clone);
+    }
+
+    function start(participant_labels_el, to_all_el) {
+        let participant_labels = participant_labels_el.value.split(/[.:,;\s]+/).filter(i => i);
+        let to_all = to_all_el.checked;
+        liveSend([1, participant_labels, to_all])
+    }
+
+    function pause(participant_labels_el, to_all_el) {
+        let participant_labels = participant_labels_el.value.split(/[.:,;\s]+/).filter(i => i);
+        let to_all = to_all_el.checked;
+        liveSend([2, participant_labels, to_all]);
+    }
+
+    function stop(participant_labels_el, to_all_el) {
+        let participant_labels = participant_labels_el.value.split(/[.:,;\s]+/).filter(i => i);
+        let to_all = to_all_el.checked;
+        liveSend([3, participant_labels, to_all]);
+    }
+
+    // Connected Clients
+    let tableConnectedClients = document.getElementById("table-body-connected-clients");
+
+    function liveRecv(data) {
+
+        let connected_clients = data;
+        console.log('Live recv');
+        console.log(data);
+
+        // Clear table
+        while (tableConnectedClients.rows.length > 0) {
+            tableConnectedClients.deleteRow(0);
+        }
+
+        for (const client of connected_clients) {
+
+            let tableRow = document.createElement("tr");
+
+            for (let [key, value] of Object.entries(client)) {
+                let tableCell = document.createElement("td");
+
+                if (key === 'time_of_authentication') {
+
+                    let time = new Date(0); // 0 sets date to the epoch
+                    time.setUTCSeconds(Number(value));
+
+                    tableCell.setAttribute("data-bs-toggle", "tooltip");
+                    tableCell.setAttribute("data-bs-placement", "left");
+                    tableCell.setAttribute("title", time.toString());
+                    new bootstrap.Tooltip(tableCell)
+
+                    value = time.toLocaleString("en-US", {
+                        day: "numeric",
+                        month: "short",
+                        hour: "numeric",
+                        minute: "numeric",
+                        second: "numeric"
+                    });
+                }
+                tableCell.innerHTML = String(value);
+                tableRow.appendChild(tableCell);
+
+                console.log(key, value);
+            }
+
+            tableConnectedClients.appendChild(tableRow);
+        }
+    }
+
+</script>
+
+{{ endblock }}

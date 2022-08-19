@@ -1,0 +1,88 @@
+{{ block title }}Your Choice{{ endblock }}
+{{ block content }}
+
+    <p>
+    You are Participant A. Now you have {{C.ENDOWMENT}}. How much will you send to participant B?
+    </p>
+
+    <p>
+        The heart Rate of the other player is currently:
+        <p id="heartRate">
+            Loading...
+        </p>
+        <body>
+            <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        </body>
+    </p>
+
+
+    {{ formfields }}
+    <p>
+    {{ next_button }}
+    </p>
+
+    {{ include C.INSTRUCTIONS_TEMPLATE }}
+
+    <script>
+
+        var counter = 0;
+        var heartRate = 0;
+        var updateInterval = 1000;
+
+        var interval = window.setInterval(function () {
+            liveSend(1)
+        }, updateInterval)
+
+        function liveRecv(data) {
+            counter++;
+            thingSpeakTime = data.thingSpeakTime;
+            heartRate = parseInt(data.heartRate);
+            oTreeTime = data.oTreeTime;
+            text = "heart rate: " + heartRate
+            document.getElementById("heartRate").innerHTML = text
+        }
+
+
+        window.onload = function () {
+
+            var dps = []; // dataPoints
+            var chart = new CanvasJS.Chart("chartContainer", {
+                title :{
+                    text: "heart rate"
+                },
+                data: [{
+                    type: "line",
+                    dataPoints: dps
+                }]
+            });
+
+
+            var dataLength = 60; // number of dataPoints visible at any point
+
+            var updateChart = function (count) {
+
+                if (heartRate == 0) {
+                    return
+                }
+
+                dps.push({
+                    x: counter,
+                    y: heartRate
+                });
+                
+
+                if (dps.length > dataLength) {
+                    dps.shift();
+                }
+
+                chart.render();
+            };
+
+            updateChart(dataLength);
+            setInterval(function(){updateChart()}, updateInterval);
+
+        }        
+    </script>
+
+{{ endblock }}

@@ -1,0 +1,41 @@
+{{ block title }}
+    Testing WebSocket Functionality
+{{ endblock }}
+{{ block content }}
+
+<!-- testing -->
+
+<div>
+    <h4>Test Recording Instructions</h4>
+    <input type="button" onclick="liveSend(1)" value="Start Recording">
+    <input type="button" onclick="liveSend(2)" value="Pause Recording">
+    <input type="button" onclick="liveSend(3)" value="Stop Recording">
+
+    <!-- Somehow not working with <button>
+    <button id="button_start">Start Recording</button>
+    <button id="button-pause">Pause Recording</button>
+    <button id="button_stop">Stop Recording</button>
+    -->
+</div>
+
+<script>
+
+    /*  Somehow not working with <button>
+    let button_start = document.getElementById('button_start');
+    let button_pause = document.getElementById('button-pause');
+    let button_stop = document.getElementById('button_stop');
+
+    button_start.addEventListener('click', () => liveSend(1));
+    button_pause.addEventListener('click', () => liveSend(2));
+    button_stop.addEventListener('click', () => liveSend(3));
+    */
+</script>
+
+<!-- testing end -->
+
+    <!--
+    {{ formfields }}
+    {{ next_button }}
+    -->
+
+{{ endblock }}

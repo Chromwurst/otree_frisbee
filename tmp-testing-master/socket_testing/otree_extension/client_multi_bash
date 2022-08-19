@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo "Run multiple clients"
+
+# while IFS= read -r line; do echo "$line"; done < ../../_rooms/econ101.txt
+
+# while IFS= read -r; do lines+=("$REPLY"); done <
+
+arr=()
+while IFS= read -r line; do
+  arr+=("$line")
+done < ../../_rooms/econ101.txt
+
+echo "Participants are: ${arr[*]}"
+
+# for participant in "${arr[@]:0:14}"
+for participant in "${arr[@]:0:14}"
+do
+    python client_echo.py "$participant" &
+    sleep .5
+done
